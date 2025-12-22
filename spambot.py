@@ -5,7 +5,9 @@ import sys
 import telebot
 from telebot import types
 import json
-
+# ------------------- BOT SETUP -------------------
+BOT_TOKEN = os.getenv("BOT_TOKEN") or "8406077185:AAF1s3uZ6a5BH1Ylicenx59jO07EnKuo4Bo"
+bot = telebot.TeleBot(BOT_TOKEN)
 # ------------------- OWNER & SUDO -------------------
 OWNER_ID = 5311223486  # Change to your Telegram user ID
 SUDO_FILE = "sudo.json"
@@ -1044,10 +1046,6 @@ FLIRT = [
 "ɪꜰ ʏᴏᴜ ʟᴏᴏᴋ ᴛʜᴀᴛ ɢᴏᴏᴅ ɪɴ ᴄʟᴏᴛʜᴇꜱ, ʏᴏᴜ ᴍᴜꜱᴛ ʟᴏᴏᴋ ᴇᴠᴇɴ ʙᴇᴛᴛᴇʀ ᴏᴜᴛ ᴏꜰ ᴛʜᴇᴍ💗💫.",
 "ɪ👀’ᴠᴇ ʙᴇᴇɴ ᴡᴏɴᴅᴇʀɪɴɢ, ᴅᴏ ʏᴏᴜʀ ʟɪᴘꜱ ᴛᴀꜱᴛᴇ ᴀꜱ ɢᴏᴏᴅ ᴀꜱ ᴛʜᴇʏ ʟᴏᴏᴋ?",
 ]
-
-# ------------------- BOT SETUP -------------------
-BOT_TOKEN = os.getenv("BOT_TOKEN") or "8406077185:AAF1s3uZ6a5BH1Ylicenx59jO07EnKuo4Bo"
-bot = telebot.TeleBot(BOT_TOKEN)
 
 # ------------------- HELPER FUNCTION -------------------
 def send_messages(bot, message, data_list, command_name):
