@@ -1099,7 +1099,8 @@ def hraid_cmd(message):
 @bot.message_handler(commands=["flirt"])
 def flirt_cmd(message):
     send_messages(bot, message, FLIRT, "flirt")
-    @bot.message_handler(commands=["porm"])
+
+@bot.message_handler(commands=["porm"])
 def porm_cmd(message):
     send_messages(bot, message, PORMS, "porm")
 
@@ -1110,6 +1111,17 @@ def lraid_cmd(message):
 @bot.message_handler(commands=["sraid"])
 def sraid_cmd(message):
     send_messages(bot, message, SRAID, "sraid")
+
+# ------------------- START COMMAND -------------------
+@bot.message_handler(commands=["start"])
+def start_cmd(message):
+    owner_username = "@candy_caugh"
+    text = (
+        f"🤖 Welcome to Radhe-Style Bot!\n\n"
+        f"Owner: {owner_username}\n\n"
+        "Use /help to see all available commands."
+    )
+    bot.send_message(message.chat.id, text)
 # ------------------- HELP COMMAND -------------------
 @bot.message_handler(commands=["help"])
 def help_cmd(message):
