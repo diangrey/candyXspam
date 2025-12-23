@@ -2,9 +2,13 @@ import os
 import time
 import random
 import sys
+import threading
 import telebot
 from telebot import types
 import json
+
+spam_active = {}   # {chat_id: True/False}
+
 # ------------------- BOT SETUP -------------------
 BOT_TOKEN = os.getenv("BOT_TOKEN") or "8406077185:AAF1s3uZ6a5BH1Ylicenx59jO07EnKuo4Bo"
 bot = telebot.TeleBot(BOT_TOKEN)
@@ -1049,6 +1053,8 @@ FLIRT = [
 
 # ------------------- HELPER FUNCTION -------------------
 def send_messages(bot, message, data_list, command_name):
+    chat_id = message.chat.id
+
     target = None
 
     # Check if command was reply
@@ -1056,7 +1062,7 @@ def send_messages(bot, message, data_list, command_name):
         target = message.reply_to_message.from_user
 
     # Check if command was mention
-    elif len(message.entities or []) > 1:
+    elif message.entities:
         for ent in message.entities:
             if ent.type == "text_mention":
                 target = ent.user
@@ -1069,17 +1075,25 @@ def send_messages(bot, message, data_list, command_name):
         )
         return
 
+    # Already running check
+    if spam_active.get(chat_id):
+        bot.reply_to(message, "⚠️ Spam already running. Use /stop")
+        return
+
     mention = f"<a href='tg://user?id={target.id}'>{target.first_name}</a>"
 
-    # Send 5 messages with 0.1 sec delay
-    for _ in range(5):
-        text = f"{mention} {random.choice(data_list)}"
-        bot.send_message(
-            message.chat.id,
-            text,
-            parse_mode="HTML"
-        )
-        time.sleep(0.1)
+    spam_active[chat_id] = True
+    bot.reply_to(message, f"🔥 {command_name} started")
+
+    # 🔁 INFINITE LOOP
+    while spam_active.get(chat_id):
+        try:
+            text = f"{mention} {random.choice(data_list)}"
+            bot.send_message(chat_id, text, parse_mode="HTML")
+            time.sleep(0.1)
+        except Exception:
+            time.sleep(1)
+
 
 # ------------------- COMMAND HANDLERS -------------------
 @bot.message_handler(commands=["abuse"])
@@ -1143,11 +1157,19 @@ def help_cmd(message):
 # ------------------- STOP COMMAND -------------------
 @bot.message_handler(commands=["stop"])
 def stop_cmd(message):
+    chat_id = message.chat.id
+
     if not is_sudo(message.from_user.id):
-        bot.reply_to(message, "❌ You are not allowed to stop the bot.")
+        bot.reply_to(message, "❌ Only owner/sudo can stop.")
         return
-    bot.reply_to(message, "🛑 Bot is stopping...")
-    sys.exit()
+
+    if not spam_active.get(chat_id):
+        bot.reply_to(message, "⚠️ No spam running here.")
+        return
+
+    spam_active[chat_id] = False
+    bot.reply_to(message, "🛑 Spam stopped")
+
 
 # ------------------- RUN BOT -------------------
 print("🤖 Radhe-style Bot is running...")
