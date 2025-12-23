@@ -2,10 +2,22 @@ import os
 import time
 import random
 import sys
-import threading
 import telebot
 from telebot import types
 import json
+from flask import Flask
+import threading
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Bot is alive"
+
+def run_web():
+    app.run(host="0.0.0.0", port=8080)
+
+threading.Thread(target=run_web).start()
 
 spam_active = {}   # {chat_id: True/False}
 
