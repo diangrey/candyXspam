@@ -10,7 +10,7 @@ import json
 spam_active = {}   # {chat_id: True/False}
 
 # ------------------- BOT SETUP -------------------
-BOT_TOKEN = os.getenv("BOT_TOKEN") or "8406077185:AAF1s3uZ6a5BH1Ylicenx59jO07EnKuo4Bo"
+BOT_TOKEN = os.getenv("BOT_TOKEN") or "8406077185:AAHOJ22GH7Hzp4l_KyHESE1Xa4_FLJI_Y3k"
 bot = telebot.TeleBot(BOT_TOKEN)
 # ------------------- OWNER & SUDO -------------------
 OWNER_ID = 5311223486  # Change to your Telegram user ID
