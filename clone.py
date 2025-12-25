@@ -1,6 +1,8 @@
-from spambot import CLONE_CONFIG if 'CLONE_CONFIG' in dir() else None
-import telebot, threading, random, time
-
+from spambot import BOT_TOKEN, OWNER_ID
+import telebot
+import random
+import threading
+import time
 def start_clone(bot_token, clone_owner_id):
     bot = telebot.TeleBot(bot_token, parse_mode="HTML")
     spam_active = {}
