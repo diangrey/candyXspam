@@ -1065,15 +1065,20 @@ FLIRT = [
 
 # ------------------- HELPER FUNCTION -------------------
 def send_messages(bot, message, data_list, command_name):
-    chat_id = message.chat.id
 
+    # 🔒 ONLY OWNER / SUDO
+    if not is_sudo(message.from_user.id):
+        bot.reply_to(
+            message,
+            "❌ This command is only for Owner / Sudo users."
+        )
+        return
+
+    chat_id = message.chat.id
     target = None
 
-    # Check if command was reply
     if message.reply_to_message:
         target = message.reply_to_message.from_user
-
-    # Check if command was mention
     elif message.entities:
         for ent in message.entities:
             if ent.type == "text_mention":
@@ -1083,27 +1088,26 @@ def send_messages(bot, message, data_list, command_name):
     if not target:
         bot.reply_to(
             message,
-            f"❌ Please reply to a user or mention someone to use /{command_name}"
+            f"❌ Reply or mention a user to use /{command_name}"
         )
         return
 
-    # Already running check
     if spam_active.get(chat_id):
         bot.reply_to(message, "⚠️ Spam already running. Use /stop")
         return
 
     mention = f"<a href='tg://user?id={target.id}'>{target.first_name}</a>"
-
     spam_active[chat_id] = True
-    bot.reply_to(message, f"🔥 {command_name} started")
 
-    # 🔁 INFINITE LOOP
     while spam_active.get(chat_id):
         try:
-            text = f"{mention} {random.choice(data_list)}"
-            bot.send_message(chat_id, text, parse_mode="HTML")
+            bot.send_message(
+                chat_id,
+                f"{mention} {random.choice(data_list)}",
+                parse_mode="HTML"
+            )
             time.sleep(0.1)
-        except Exception:
+        except:
             time.sleep(1)
 
 
