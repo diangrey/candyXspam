@@ -97,20 +97,7 @@ def sudolist_cmd(message):
     else:
         text = "👑 Sudo Users:\n" + "\n".join([str(u) for u in SUDO_LIST])
         bot.reply_to(message, text)
-        # ===== CLONE SYSTEM =====
-from clone import start_clone
-
-@bot.message_handler(commands=["clone"])
-def clone_cmd(message):
-    if not is_owner(message.from_user.id):
-        return
-    try:
-        token = message.text.split()[1]
-    except:
-        bot.reply_to(message, "Usage: /clone BOT_TOKEN")
-        return
-    start_clone(token, message.from_user.id)
-    bot.reply_to(message, "✅ Clone started")
+        
 
 # ------------------- DATA -------------------
 PORMS = [
